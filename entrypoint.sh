@@ -21,7 +21,7 @@ export HOME=/tmp
 mkdir /tmp/working
 pushd /tmp/working
   yumdownloader --disablerepo='*' --destdir=/tmp/rpms ${PACKAGES[*]} --repofrompath="ose,${REPO}"
-  for i in $(find /tmp/rpms/ -name origin-* -iname *.rpm); do
+  for i in $(find /tmp/rpms/ -iname *.rpm); do
     echo "Extracting $i ..."
     rpm2cpio $i | cpio -div
   done
