@@ -1,9 +1,8 @@
 #!/bin/sh
 set -exuo pipefail
 
-REPOS=(
-  https://mirror.openshift.com/pub/openshift-v4/dependencies/rpms/4.3-beta/
-)
+REPO=https://mirror.openshift.com/pub/openshift-v4/dependencies/rpms/4.3-beta/
+
 # TODO: Add machine-config-daemon
 PACKAGES=(
   cri-o
@@ -18,18 +17,10 @@ mkdir -p "${dir}"
 export PATH=$PATH:/tmp/bin
 export HOME=/tmp
 
-# add repos
-for repo in ${REPOS[@]}; do
-  yum-config-manager --add-repo "${repo}"
-done
-yum-config-manager --save \
-    --setopt=\*.gpgcheck=0 \
-    --setopt=\*.skip_if_unavailable=true
-
 # extract rpm content in temp dir
 mkdir /tmp/working
 pushd /tmp/working
-  yumdownloader --destdir=/tmp/rpms "${PACKAGES[*]}"
+  yumdownloader --destdir=/tmp/rpms "${PACKAGES[*]}" --repofrompath="ose,${REPO}"
   for i in $(find /tmp/rpms/ -name origin-* -iname *.rpm); do
     echo "Extracting $i ..."
     rpm2cpio $i | cpio -div
