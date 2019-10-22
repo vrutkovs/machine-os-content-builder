@@ -20,7 +20,7 @@ export HOME=/tmp
 # extract rpm content in temp dir
 mkdir /tmp/working
 pushd /tmp/working
-  yumdownloader --destdir=/tmp/rpms "${PACKAGES[*]}" --repofrompath="ose,${REPO}"
+  yumdownloader --destdir=/tmp/rpms ${PACKAGES[*]} --repofrompath="ose,${REPO}"
   for i in $(find /tmp/rpms/ -name origin-* -iname *.rpm); do
     echo "Extracting $i ..."
     rpm2cpio $i | cpio -div
