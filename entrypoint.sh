@@ -17,6 +17,27 @@ mkdir -p "${dir}"
 export PATH=$PATH:/tmp/bin
 export HOME=/tmp
 
+#mkdir $HOME/.docker/
+#cp /usr/local/pull-secret/.dockerconfigjson $HOME/.docker/config.json
+
+mkdir $HOME/bin
+curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 2>/dev/null >/tmp/bin/jq
+chmod ug+x $HOME/bin/jq
+
+# fetch fcos release info and check whether we've already built this image
+stream=testing-devel
+build_url="https://builds.coreos.fedoraproject.org/prod/streams/${stream}/builds"
+curl "${build_url}/builds.json" 2>/dev/null >${dir}/builds.json
+build_id="$( <"${dir}/builds.json" jq -r '.builds[0].id' )"
+base_url="${build_url}/${build_id}/x86_64"
+curl "${base_url}/meta.json" 2>/dev/null >${dir}/meta.json
+tar_url="${base_url}/$( <${dir}/meta.json jq -r .images.ostree.path )"
+commit_id="$( <${dir}/meta.json jq -r '."ostree-commit"' )"
+
+# fetch existing machine-os-content
+mkdir /srv/repo
+curl -L "${tar_url}" | tar xf - -C /srv/repo/
+
 # extract rpm content in temp dir
 mkdir /tmp/working
 pushd /tmp/working
