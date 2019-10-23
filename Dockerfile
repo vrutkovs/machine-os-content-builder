@@ -4,3 +4,4 @@ RUN /usr/bin/entrypoint.sh
 
 FROM scratch
 COPY --from=build /srv/ /srv/
+ENTRYPOINT ["/noentry"]
