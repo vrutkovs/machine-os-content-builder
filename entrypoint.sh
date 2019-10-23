@@ -18,9 +18,7 @@ mkdir -p "${dir}"
 export PATH=$PATH:/tmp/bin
 export HOME=/tmp
 
-#mkdir $HOME/.docker/
-#cp /usr/local/pull-secret/.dockerconfigjson $HOME/.docker/config.json
-
+# fetch jq binary
 mkdir $HOME/bin
 curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 2>/dev/null >/tmp/bin/jq
 chmod ug+x $HOME/bin/jq
