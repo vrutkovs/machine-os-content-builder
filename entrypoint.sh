@@ -4,7 +4,6 @@ set -exuo pipefail
 REPO="https://mirror.openshift.com/pub/openshift-v4/dependencies/rpms/4.3-beta/"
 REF="fedora/x86_64/coreos/testing-devel"
 
-# TODO: Add machine-config-daemon
 PACKAGES=(
   cri-o
   cri-tools
@@ -49,6 +48,10 @@ pushd /tmp/working
   done
   mv etc usr/
 popd
+
+# add binaries from /srv/addons
+mkdir -p /tmp/working/usr/bin
+cp -rvf /srv/addons/* /tmp/working/
 
 # Add binaries to the tree
 coreos-assembler dev-overlay --repo /srv/repo --rev "${REF}" --add-tree /tmp/working --output-ref "${REF}"
