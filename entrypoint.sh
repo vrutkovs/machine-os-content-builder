@@ -2,7 +2,8 @@
 set -exuo pipefail
 
 REPO="https://mirror.openshift.com/pub/openshift-v4/dependencies/rpms/4.3-beta/"
-REF="fedora/x86_64/coreos/testing-devel"
+STREAM="testing-devel"
+REF="fedora/x86_64/coreos/${STREAM}"
 
 PACKAGES=(
   cri-o
@@ -25,7 +26,6 @@ curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 2>/de
 chmod ug+x $HOME/bin/jq
 
 # fetch fcos release info and check whether we've already built this image
-stream=testing-devel
 build_url="https://builds.coreos.fedoraproject.org/prod/streams/${stream}/builds"
 curl "${build_url}/builds.json" 2>/dev/null >${dir}/builds.json
 build_id="$( <"${dir}/builds.json" jq -r '.builds[0].id' )"
