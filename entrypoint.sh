@@ -2,10 +2,9 @@
 set -exuo pipefail
 
 REPOS=(
-  ose
+  http://base-4-3-rhel8.ocp.svc/rhel-8-appstream
   https://mirror.openshift.com/pub/openshift-v4/dependencies/rpms/4.3-beta/
   https://vrutkovs.github.io/okd-on-fcos-fixes
-  http://base-4-3-rhel8.ocp.svc
 )
 STREAM="testing-devel"
 REF="fedora/x86_64/coreos/${STREAM}"
@@ -43,11 +42,15 @@ commit_id="$( <${dir}/meta.json jq -r '."ostree-commit"' )"
 mkdir /srv/repo
 curl -L "${tar_url}" | tar xf - -C /srv/repo/
 
+REPOLIST=""
+for i in "${!REPOS[@]}"; do
+  REPOLIST="${REPOLIST} --repofrompath=repo${i},${REPOS[$i]}"
+done
+
 # extract rpm content in temp dir
 mkdir /tmp/working
 pushd /tmp/working
-  REPO=$(printf "%s," "${REPOS[@]}")
-  yumdownloader --disablerepo='*' --destdir=/tmp/rpms ${PACKAGES[*]} --repofrompath="${REPO::-1}"
+  yumdownloader --disablerepo='*' --destdir=/tmp/rpms ${REPOLIST} ${PACKAGES[*]}
   for i in $(find /tmp/rpms/ -iname *.rpm); do
     echo "Extracting $i ..."
     rpm2cpio $i | cpio -div
