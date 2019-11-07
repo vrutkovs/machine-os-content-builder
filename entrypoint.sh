@@ -14,7 +14,6 @@ PACKAGES=(
   cri-tools
   openshift-hyperkube
   openshift-clients
-  nfs-utils-coreos
   socat
 )
 
