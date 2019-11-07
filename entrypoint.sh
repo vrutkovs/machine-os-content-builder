@@ -5,6 +5,7 @@ REPOS=(
   ose
   https://mirror.openshift.com/pub/openshift-v4/dependencies/rpms/4.3-beta/
   https://vrutkovs.github.io/okd-on-fcos-fixes
+  http://base-4-3-rhel8.ocp.svc
 )
 STREAM="testing-devel"
 REF="fedora/x86_64/coreos/${STREAM}"
@@ -15,6 +16,7 @@ PACKAGES=(
   openshift-hyperkube
   openshift-clients
   nfs-utils-coreos
+  socat
 )
 
 # fetch binaries and configure working env, prow doesn't allow init containers or a second container
