@@ -4,6 +4,7 @@ set -exuo pipefail
 REPOS=(
   ose
   https://mirror.openshift.com/pub/openshift-v4/dependencies/rpms/4.3-beta/
+  https://vrutkovs.github.io/okd-on-fcos-fixes
 )
 STREAM="testing-devel"
 REF="fedora/x86_64/coreos/${STREAM}"
@@ -13,6 +14,7 @@ PACKAGES=(
   cri-tools
   openshift-hyperkube
   openshift-clients
+  nfs-utils-coreos
 )
 
 # fetch binaries and configure working env, prow doesn't allow init containers or a second container
