@@ -1,7 +1,10 @@
 #!/bin/sh
 set -exuo pipefail
 
-REPO="https://mirror.openshift.com/pub/openshift-v4/dependencies/rpms/4.3-beta/"
+REPOS=(
+  ose
+  https://mirror.openshift.com/pub/openshift-v4/dependencies/rpms/4.3-beta/
+)
 STREAM="testing-devel"
 REF="fedora/x86_64/coreos/${STREAM}"
 
@@ -39,7 +42,8 @@ curl -L "${tar_url}" | tar xf - -C /srv/repo/
 # extract rpm content in temp dir
 mkdir /tmp/working
 pushd /tmp/working
-  yumdownloader --disablerepo='*' --destdir=/tmp/rpms ${PACKAGES[*]} --repofrompath="ose,${REPO}"
+  REPO=$(printf "%s," "${REPOS[@]}")
+  yumdownloader --disablerepo='*' --destdir=/tmp/rpms ${PACKAGES[*]} --repofrompath="${REPO::-1}"
   for i in $(find /tmp/rpms/ -iname *.rpm); do
     echo "Extracting $i ..."
     rpm2cpio $i | cpio -div
