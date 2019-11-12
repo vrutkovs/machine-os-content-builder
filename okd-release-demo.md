@@ -71,6 +71,14 @@ openshift-install create cluster ...
 ```
 
 # Advanced topics
+
+# OKD-on-FCOS 4.3 specifics
+
+* openshift-installer from `fcos` branch
+* machine-config-daemon from `fcos` branch
+
+Please add `[FCOS]` tag to your contribution
+
 ## Mixing binaries in your own machine-os-content
 
 https://github.com/vrutkovs/machine-os-content-builder
