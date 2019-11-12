@@ -56,6 +56,9 @@ pushd /tmp/working
     rpm2cpio $i | cpio -div
   done
   mv etc usr/
+  # /sbin is a symlink to /usr/sbin
+  mv sbin/* usr/sbin/
+  rm -rf sbin
 popd
 
 # add binaries from /srv/addons
