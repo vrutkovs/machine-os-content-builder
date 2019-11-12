@@ -77,4 +77,5 @@ https://github.com/vrutkovs/machine-os-content-builder
 
 ## Entirely different OS base?
 
-See https://github.com/coreos/coreos-assembler to build your own (rpm-)ostree based OS
+See https://github.com/coreos/coreos-assembler to build your own (rpm-)ostree based OS.
+FCOS configuration: https://github.com/coreos/fedora-coreos-config/
