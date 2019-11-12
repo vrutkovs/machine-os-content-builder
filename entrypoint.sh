@@ -2,6 +2,7 @@
 set -exuo pipefail
 
 REPOS=(
+  http://base-4-3-rhel8.ocp.svc/rhel-8-baseos
   http://base-4-3-rhel8.ocp.svc/rhel-8-appstream
   https://mirror.openshift.com/pub/openshift-v4/dependencies/rpms/4.3-beta/
   https://vrutkovs.github.io/okd-on-fcos-fixes
@@ -14,7 +15,7 @@ PACKAGES=(
   cri-tools
   openshift-hyperkube
   openshift-clients
-  socat
+  glusterfs-fuse
 )
 
 # fetch binaries and configure working env, prow doesn't allow init containers or a second container
