@@ -1,3 +1,5 @@
+https://origin-release.svc.ci.openshift.org/
+
 # Images included in the release
 `oc adm -a /path/to/pull_secret.json release info registry.svc.ci.openshift.org/origin/release:4.3`
 
