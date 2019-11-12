@@ -69,3 +69,12 @@ It also includes amendment for `install-config.yaml` to add after its mirrored
 export OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE=quay.io/vrutkovs/okd-release:4.3-network-updated
 openshift-install create cluster ...
 ```
+
+# Advanced topics
+## Mixing binaries in your own machine-os-content
+
+https://github.com/vrutkovs/machine-os-content-builder
+
+## Entirely different OS base?
+
+See https://github.com/coreos/coreos-assembler to build your own (rpm-)ostree based OS
