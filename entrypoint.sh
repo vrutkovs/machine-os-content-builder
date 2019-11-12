@@ -15,7 +15,12 @@ PACKAGES=(
   cri-tools
   openshift-hyperkube
   openshift-clients
+  attr
+  glusterfs
+  glusterfs-client-xlators
   glusterfs-fuse
+  glusterfs-libs
+  psmisc
 )
 
 # fetch binaries and configure working env, prow doesn't allow init containers or a second container
