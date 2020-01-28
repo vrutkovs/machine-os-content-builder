@@ -7,11 +7,10 @@ REPOS=(
 STREAM="testing-devel"
 REF="fedora/x86_64/coreos/${STREAM}"
 
+# openshift-hyperkube and openshift-clients would already be placed in /tmp/rpms
 PACKAGES=(
   cri-o
   cri-tools
-  openshift-hyperkube
-  openshift-clients
   attr
   glusterfs
   glusterfs-client-xlators
@@ -47,6 +46,7 @@ curl -L "${tar_url}" | tar xf - -C /srv/repo/ --no-same-owner
 # use repos from FCOS
 rm -rf /etc/yum.repos.d
 ostree --repo=/srv/repo checkout "${REF}" --subpath /usr/etc/yum.repos.d --user-mode /etc/yum.repos.d
+dnf clean all
 
 # enable crio 1.17
 sed -i 's/enabled=0/enabled=1/g' /etc/yum.repos.d/fedora-updates-testing-modular.repo
