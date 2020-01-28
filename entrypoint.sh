@@ -2,9 +2,6 @@
 set -exuo pipefail
 
 REPOS=(
-  http://base-4-3-rhel8.ocp.svc/rhel-8-baseos
-  http://base-4-3-rhel8.ocp.svc/rhel-8-appstream
-  https://mirror.openshift.com/pub/openshift-v4/dependencies/rpms/4.3-beta/
   https://vrutkovs.github.io/okd-on-fcos-fixes
 )
 STREAM="testing-devel"
@@ -45,9 +42,17 @@ commit_id="$( <${dir}/meta.json jq -r '."ostree-commit"' )"
 
 # fetch existing machine-os-content
 mkdir /srv/repo
-curl -L "${tar_url}" | tar xf - -C /srv/repo/
+curl -L "${tar_url}" | tar xf - -C /srv/repo/ --no-same-owner
 
-REPOLIST=""
+# use repos from FCOS
+rm -rf /etc/yum.repos.d
+ostree --repo=/srv/repo checkout "${REF}" --subpath /usr/etc/yum.repos.d --user-mode /etc/yum.repos.d
+
+# enable crio 1.17
+sed -i 's/enabled=0/enabled=1/g' /etc/yum.repos.d/fedora-updates-testing-modular.repo
+dnf module enable -y cri-o:1.17
+
+REPOLIST="--enablerepo=fedora --enablerepo=updates --enablerepo=updates-testing-modular"
 for i in "${!REPOS[@]}"; do
   REPOLIST="${REPOLIST} --repofrompath=repo${i},${REPOS[$i]}"
 done
