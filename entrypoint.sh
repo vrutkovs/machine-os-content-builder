@@ -60,7 +60,7 @@ done
 # extract rpm content in temp dir
 mkdir /tmp/working
 pushd /tmp/working
-  yumdownloader --disablerepo='*' --destdir=/tmp/rpms ${REPOLIST} ${PACKAGES[*]}
+  yumdownloader --archlist=x86_64 --disablerepo='*' --destdir=/tmp/rpms ${REPOLIST} ${PACKAGES[*]}
   for i in $(find /tmp/rpms/ -iname *.rpm); do
     echo "Extracting $i ..."
     rpm2cpio $i | cpio -div
