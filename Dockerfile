@@ -1,4 +1,4 @@
-FROM quay.io/openshift/origin-machine-config-operator:4.4 as mcd
+FROM quay.io/vrutkovs/machine-config-operator:cgroupsv2 as mcd
 FROM quay.io/openshift/origin-artifacts:4.4 as artifacts
 
 FROM quay.io/coreos-assembler/coreos-assembler:latest AS build
