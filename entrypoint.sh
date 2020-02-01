@@ -17,6 +17,7 @@ PACKAGES=(
   glusterfs-fuse
   glusterfs-libs
   psmisc
+  openshift-hyperkube
 )
 
 # fetch binaries and configure working env, prow doesn't allow init containers or a second container
