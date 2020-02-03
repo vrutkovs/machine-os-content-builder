@@ -9,15 +9,17 @@ REF="fedora/x86_64/coreos/${STREAM}"
 
 # openshift-hyperkube and openshift-clients would already be placed in /tmp/rpms
 PACKAGES=(
-  cri-o
-  cri-tools
   attr
   glusterfs
   glusterfs-client-xlators
   glusterfs-fuse
   glusterfs-libs
   psmisc
+)
+
+FIXPACKAGES=(
   openshift-hyperkube
+  cri-o
   conmon
 )
 
@@ -51,18 +53,21 @@ ostree --repo=/srv/repo checkout "${REF}" --subpath /usr/etc/yum.repos.d --user-
 dnf clean all
 
 # enable crio 1.17
-sed -i 's/enabled=0/enabled=1/g' /etc/yum.repos.d/fedora-updates-testing-modular.repo
-dnf module enable -y cri-o:1.17
+#sed -i 's/enabled=0/enabled=1/g' /etc/yum.repos.d/fedora-updates-testing-modular.repo
+#dnf module enable -y cri-o:1.17
 
 REPOLIST="--enablerepo=fedora --enablerepo=updates --enablerepo=updates-testing-modular"
+FIXREPOLIST=""
 for i in "${!REPOS[@]}"; do
-  REPOLIST="${REPOLIST} --repofrompath=repo${i},${REPOS[$i]}"
+  FIXREPOLIST="${FIXREPOLIST} --repofrompath=repo${i},${REPOS[$i]}"
 done
 
 # extract rpm content in temp dir
 mkdir /tmp/working
 pushd /tmp/working
+  dnf clean all
   yumdownloader --archlist=x86_64 --disablerepo='*' --destdir=/tmp/rpms ${REPOLIST} ${PACKAGES[*]}
+  yumdownloader --archlist=x86_64 --disablerepo='*' --destdir=/tmp/rpms ${FIXREPOLIST} ${FIXPACKAGES[*]}
   for i in $(find /tmp/rpms/ -iname *.rpm); do
     echo "Extracting $i ..."
     rpm2cpio $i | cpio -div
