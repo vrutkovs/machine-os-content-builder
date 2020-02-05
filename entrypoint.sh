@@ -67,6 +67,7 @@ done
 mkdir /tmp/working
 pushd /tmp/working
   dnf clean all
+  rm -rf /tmp/rpms && mkdir /tmp/rpms
   yumdownloader --archlist=x86_64 --disablerepo='*' --destdir=/tmp/rpms ${REPOLIST} ${PACKAGES[*]}
   yumdownloader --archlist=x86_64 --disablerepo='*' --destdir=/tmp/rpms ${FIXREPOLIST} ${FIXPACKAGES[*]}
   for i in $(find /tmp/rpms/ -iname *.rpm); do
