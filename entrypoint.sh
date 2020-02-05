@@ -21,7 +21,6 @@ FIXPACKAGES=(
   openshift-hyperkube
   cri-o
   cri-tools
-  conmon
   crun
 )
 
