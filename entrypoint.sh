@@ -18,10 +18,8 @@ PACKAGES=(
 )
 
 FIXPACKAGES=(
-  openshift-hyperkube
   cri-o
   cri-tools
-  crun
 )
 
 # fetch binaries and configure working env, prow doesn't allow init containers or a second container
