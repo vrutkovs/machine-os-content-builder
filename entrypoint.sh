@@ -2,21 +2,18 @@
 set -exuo pipefail
 
 REPOS=(
-  https://vrutkovs.github.io/okd-on-fcos-fixes
+  https://mirror.openshift.com/pub/openshift-v4/dependencies/rpms/4.3-beta2/
 )
-STREAM="testing-devel"
-REF="fedora/x86_64/coreos/${STREAM}"
+tar_url="http://192.168.1.155:8000/builds/latest/x86_64/centos-coreos-8.20200224.dev.0-ostree.x86_64.tar"
+REF="centos/x86_64/coreos/testing-devel"
 
 # openshift-hyperkube and openshift-clients would already be placed in /tmp/rpms
 PACKAGES=(
   cri-o
   cri-tools
-  attr
-  glusterfs
-  glusterfs-client-xlators
-  glusterfs-fuse
-  glusterfs-libs
-  psmisc
+  conmon
+  runc
+  slirp4netns
   openshift-hyperkube
 )
 
@@ -31,15 +28,6 @@ mkdir $HOME/bin
 curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 2>/dev/null >/tmp/bin/jq
 chmod ug+x $HOME/bin/jq
 
-# fetch fcos release info and check whether we've already built this image
-build_url="https://builds.coreos.fedoraproject.org/prod/streams/${STREAM}/builds"
-curl "${build_url}/builds.json" 2>/dev/null >${dir}/builds.json
-build_id="$( <"${dir}/builds.json" jq -r '.builds[0].id' )"
-base_url="${build_url}/${build_id}/x86_64"
-curl "${base_url}/meta.json" 2>/dev/null >${dir}/meta.json
-tar_url="${base_url}/$( <${dir}/meta.json jq -r .images.ostree.path )"
-commit_id="$( <${dir}/meta.json jq -r '."ostree-commit"' )"
-
 # fetch existing machine-os-content
 mkdir /srv/repo
 curl -L "${tar_url}" | tar xf - -C /srv/repo/ --no-same-owner
@@ -49,11 +37,7 @@ rm -rf /etc/yum.repos.d
 ostree --repo=/srv/repo checkout "${REF}" --subpath /usr/etc/yum.repos.d --user-mode /etc/yum.repos.d
 dnf clean all
 
-# enable crio 1.17
-sed -i 's/enabled=0/enabled=1/g' /etc/yum.repos.d/fedora-updates-testing-modular.repo
-dnf module enable -y cri-o:1.17
-
-REPOLIST="--enablerepo=fedora --enablerepo=updates --enablerepo=updates-testing-modular"
+REPOLIST=""
 for i in "${!REPOS[@]}"; do
   REPOLIST="${REPOLIST} --repofrompath=repo${i},${REPOS[$i]}"
 done
@@ -67,8 +51,8 @@ pushd /tmp/working
     rpm2cpio $i | cpio -div
   done
   mv etc usr/
-  # /sbin is a symlink to /usr/sbin
-  mv sbin/* usr/sbin/
+  # crio is creating /opt/cni, which would break dev-overlay
+  rm -rf opt/
   rm -rf sbin
 popd
 
