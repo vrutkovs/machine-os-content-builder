@@ -1,9 +1,7 @@
 #!/bin/sh
 set -exuo pipefail
 
-REPOS=(
-  https://vrutkovs.github.io/okd-on-fcos-fixes
-)
+REPOS=()
 STREAM="next"
 REF="fedora/x86_64/coreos/${STREAM}"
 
@@ -17,7 +15,6 @@ PACKAGES=(
   glusterfs-fuse
   glusterfs-libs
   psmisc
-  openshift-hyperkube
 )
 
 # fetch binaries and configure working env, prow doesn't allow init containers or a second container
