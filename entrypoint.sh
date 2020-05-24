@@ -44,11 +44,14 @@ curl -L "${tar_url}" | tar xf - -C /srv/repo/ --no-same-owner
 # use repos from FCOS
 rm -rf /etc/yum.repos.d
 ostree --repo=/srv/repo checkout "${REF}" --subpath /usr/etc/yum.repos.d --user-mode /etc/yum.repos.d
+# repos use $releasever, set in os-release. Copy it from the ostree commit
+ostree --repo=/srv/repo cat "${REF}" /usr/lib/os-release > /etc/os-release
+source /etc/os-release
 dnf clean all
 
 # enable crio 1.17
 sed -i 's/enabled=0/enabled=1/g' /etc/yum.repos.d/fedora-updates-testing-modular.repo
-dnf module enable -y cri-o:1.18
+dnf --setopt=releasever="${VERSION_ID}" module enable -y cri-o:1.18
 
 REPOLIST="--enablerepo=fedora --enablerepo=updates --enablerepo=updates-testing-modular"
 for i in "${!REPOS[@]}"; do
@@ -58,7 +61,7 @@ done
 # extract rpm content in temp dir
 mkdir /tmp/working
 pushd /tmp/working
-  yumdownloader --archlist=x86_64 --disablerepo='*' --destdir=/tmp/rpms ${REPOLIST} ${PACKAGES[*]}
+  yumdownloader --setopt=releasever="${VERSION_ID}" --archlist=x86_64 --disablerepo='*' --destdir=/tmp/rpms ${REPOLIST} ${PACKAGES[*]}
   for i in $(find /tmp/rpms/ -iname *.rpm); do
     echo "Extracting $i ..."
     rpm2cpio $i | cpio -div
