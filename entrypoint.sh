@@ -2,7 +2,7 @@
 set -exuo pipefail
 
 REPOS=()
-STREAM="next"
+STREAM="testing-devel"
 REF="fedora/x86_64/coreos/${STREAM}"
 
 # openshift-hyperkube and openshift-clients would already be placed in /tmp/rpms
