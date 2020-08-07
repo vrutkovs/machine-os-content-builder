@@ -18,6 +18,16 @@ PACKAGES=(
   NetworkManager-ovs
   openvswitch
   dpdk
+  gdbm-libs
+  libxcrypt-compat
+  python-pip-wheel
+  python-setuptools-wheel
+  python-unversioned-command
+  python3
+  python3-libs
+  python3-pip
+  python3-setuptools
+  unbound-libs
 )
 
 # fetch binaries and configure working env, prow doesn't allow init containers or a second container
