@@ -47,9 +47,9 @@ rm -rf /etc/yum.repos.d
 ostree --repo=/srv/repo checkout "${REF}" --subpath /usr/etc/yum.repos.d --user-mode /etc/yum.repos.d
 dnf clean all
 
-# enable crio 1.17
+# enable crio 1.18
 sed -i 's/enabled=0/enabled=1/g' /etc/yum.repos.d/fedora-updates-testing-modular.repo
-dnf module enable -y cri-o:1.17
+dnf module enable -y cri-o:1.18
 
 REPOLIST="--enablerepo=fedora --enablerepo=updates --enablerepo=updates-testing-modular"
 for i in "${!REPOS[@]}"; do
