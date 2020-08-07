@@ -17,6 +17,7 @@ PACKAGES=(
   psmisc
   NetworkManager-ovs
   openvswitch
+  dpdk
 )
 
 # fetch binaries and configure working env, prow doesn't allow init containers or a second container
