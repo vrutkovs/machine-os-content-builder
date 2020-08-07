@@ -20,13 +20,6 @@ PACKAGES=(
   dpdk
   gdbm-libs
   libxcrypt-compat
-  python-pip-wheel
-  python-setuptools-wheel
-  python-unversioned-command
-  python3
-  python3-libs
-  python3-pip
-  python3-setuptools
   unbound-libs
 )
 
