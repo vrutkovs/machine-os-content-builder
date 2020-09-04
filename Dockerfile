@@ -1,4 +1,4 @@
-FROM quay.io/openshift/origin-machine-config-operator:4.6 as mcd
+FROM registry.svc.ci.openshift.org/vrutkovs/machine-config-operator@sha256:b8d7a44f208bf27aee907acdd4c3b6f07200dd7f5ca6d7ebd86499cdf378f7ce as mcd
 FROM quay.io/openshift/origin-artifacts:4.6 as artifacts
 
 FROM quay.io/coreos-assembler/coreos-assembler:latest AS build
