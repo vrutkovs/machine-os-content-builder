@@ -21,6 +21,10 @@ EXTENSION_RPMS=(
   unbound-libs
   python3-libs
 )
+CRIO_RPMS=(
+  cri-o
+  cri-tools
+)
 CRIO_VERSION="1.18"
 
 # fetch binaries and configure working env, prow doesn't allow init containers or a second container
@@ -52,12 +56,8 @@ rm -rf /etc/yum.repos.d
 ostree --repo=/srv/repo checkout "${REF}" --subpath /usr/etc/yum.repos.d --user-mode /etc/yum.repos.d
 dnf clean all
 
-# enable crio
-sed -i 's/enabled=0/enabled=1/g' /etc/yum.repos.d/fedora-updates-testing-modular.repo
-dnf module enable -y cri-o:${CRIO_VERSION}
-
 # prepare a list of repos to download packages from
-REPOLIST="--enablerepo=fedora --enablerepo=updates --enablerepo=updates-testing-modular"
+REPOLIST="--enablerepo=fedora --enablerepo=updates"
 for i in "${!REPOS[@]}"; do
   REPOLIST="${REPOLIST} --repofrompath=repo${i},${REPOS[$i]}"
 done
@@ -74,6 +74,11 @@ popd
 # inject cri-o, hyperkube RPMs and MCD binary in the ostree commit
 mkdir /tmp/working
 pushd /tmp/working
+  # enable crio
+  sed -i 's/enabled=0/enabled=1/g' /etc/yum.repos.d/fedora-updates-testing-modular.repo
+  dnf module enable -y cri-o:${CRIO_VERSION}
+  yumdownloader --archlist=x86_64 --disablerepo='*' --destdir=/tmp/rpms --enablerepo=updates-testing-modular cri-o cri-tools
+
   for i in $(find /tmp/rpms/ -iname *.rpm); do
     echo "Extracting $i ..."
     rpm2cpio $i | cpio -div
