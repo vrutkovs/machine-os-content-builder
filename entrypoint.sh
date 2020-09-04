@@ -63,23 +63,10 @@ for i in "${!REPOS[@]}"; do
   REPOLIST="${REPOLIST} --repofrompath=repo${i},${REPOS[$i]}"
 done
 
-# extract rpm content in temp dir
-mkdir /tmp/working
-pushd /tmp/working
-  yumdownloader --archlist=x86_64 --disablerepo='*' --destdir=/tmp/rpms ${REPOLIST} ${PACKAGES[*]}
-  for i in $(find /tmp/rpms/ -iname *.rpm); do
-    echo "Extracting $i ..."
-    rpm2cpio $i | cpio -div
-  done
-  mv etc usr/
-  # /sbin is a symlink to /usr/sbin
-  mv sbin/* usr/sbin/
-  rm -rf sbin
-popd
+# download extension RPMs
+mkdir -p /extensions/okd
+yumdownloader --archlist=x86_64 --disablerepo='*' --destdir=/extensions/okd ${REPOLIST} ${PACKAGES[*]}
 
-# add binaries from /srv/addons
-mkdir -p /tmp/working/usr/bin
-cp -rvf /srv/addons/* /tmp/working/
-
-# Add binaries to the tree
-coreos-assembler dev-overlay --repo /srv/repo --rev "${REF}" --add-tree /tmp/working --output-ref "${REF}"
+# build rpmostree repo
+cd /extensions
+createrepo_c .
