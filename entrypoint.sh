@@ -5,10 +5,8 @@ REPOS=()
 STREAM="next-devel"
 REF="fedora/x86_64/coreos/${STREAM}"
 
-# openshift-hyperkube and openshift-clients would already be placed in /tmp/rpms
-PACKAGES=(
-  cri-o
-  cri-tools
+# additional RPMs to install via os-extensions
+EXTENSION_RPMS=(
   attr
   glusterfs
   glusterfs-client-xlators
@@ -66,9 +64,29 @@ done
 
 # download extension RPMs
 mkdir -p /extensions/okd
-yumdownloader --archlist=x86_64 --disablerepo='*' --destdir=/extensions/okd ${REPOLIST} ${PACKAGES[*]}
-cp -rvf /tmp/rpms/* /extensions/okd
+yumdownloader --archlist=x86_64 --disablerepo='*' --destdir=/extensions/okd ${REPOLIST} ${EXTENSION_RPMS[*]}
 
 # build rpmostree repo
-cd /extensions
-createrepo_c --no-database .
+pushd /extensions
+  createrepo_c --no-database .
+popd
+
+# inject cri-o, hyperkube RPMs and MCD binary in the ostree commit
+mkdir /tmp/working
+pushd /tmp/working
+  for i in $(find /tmp/rpms/ -iname *.rpm); do
+    echo "Extracting $i ..."
+    rpm2cpio $i | cpio -div
+  done
+  mv etc usr/
+  # /sbin is a symlink to /usr/sbin
+  mv sbin/* usr/sbin/
+  rm -rf sbin
+popd
+
+# add binaries (MCD) from /srv/addons
+mkdir -p /tmp/working/usr/bin
+cp -rvf /srv/addons/* /tmp/working/
+
+# Add binaries to the tree
+coreos-assembler dev-overlay --repo /srv/repo --rev "${REF}" --add-tree /tmp/working --output-ref "${REF}"
