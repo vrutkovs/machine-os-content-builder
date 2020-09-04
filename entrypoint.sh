@@ -95,5 +95,8 @@ popd
 mkdir -p /tmp/working/usr/bin
 cp -rvf /srv/addons/* /tmp/working/
 
-# Add binaries to the tree
+# remove repos from host so that rpm-ostree would use local repos when installing extensions
+rm -rf /tmp/working/etc/yum.repos.d
+
+# build new commit
 coreos-assembler dev-overlay --repo /srv/repo --rev "${REF}" --add-tree /tmp/working --output-ref "${REF}"
