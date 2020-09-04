@@ -2,26 +2,13 @@
 set -exuo pipefail
 
 REPOS=()
-STREAM="testing-devel"
+STREAM="okd-devel"
 REF="fedora/x86_64/coreos/${STREAM}"
 
 # openshift-hyperkube and openshift-clients would already be placed in /tmp/rpms
 PACKAGES=(
   cri-o
   cri-tools
-  attr
-  glusterfs
-  glusterfs-client-xlators
-  glusterfs-fuse
-  glusterfs-libs
-  psmisc
-  NetworkManager-ovs
-  openvswitch
-  dpdk
-  gdbm-libs
-  libxcrypt-compat
-  unbound-libs
-  python3-libs
 )
 
 # fetch binaries and configure working env, prow doesn't allow init containers or a second container
