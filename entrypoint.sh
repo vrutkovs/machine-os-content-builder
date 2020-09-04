@@ -20,6 +20,11 @@ EXTENSION_RPMS=(
   libxcrypt-compat
   unbound-libs
   python3-libs
+  open-vm-tools
+  xmlsec1
+  xmlsec1-openssl
+  libxslt
+  libtool-ltdl
 )
 CRIO_RPMS=(
   cri-o
