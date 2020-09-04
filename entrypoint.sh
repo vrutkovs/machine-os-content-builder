@@ -69,4 +69,4 @@ yumdownloader --archlist=x86_64 --disablerepo='*' --destdir=/extensions/okd ${RE
 
 # build rpmostree repo
 cd /extensions
-createrepo_c .
+createrepo_c --no-database .
