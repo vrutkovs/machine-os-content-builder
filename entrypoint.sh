@@ -20,6 +20,16 @@ EXTENSION_RPMS=(
   libxcrypt-compat
   unbound-libs
   python3-libs
+  hwdata
+  libdrm
+  libmspack
+  libpciaccess
+  pciutils
+  pciutils-libs
+  python-pip-wheel
+  python-setuptools-wheel
+  python3
+  python3-libs
   open-vm-tools
   xmlsec1
   xmlsec1-openssl
