@@ -58,6 +58,7 @@ dnf clean all
 sed -i 's/enabled=0/enabled=1/g' /etc/yum.repos.d/fedora-updates-testing-modular.repo
 dnf module enable -y cri-o:${CRIO_VERSION}
 
+# prepare a list of repos to download packages from
 REPOLIST="--enablerepo=fedora --enablerepo=updates --enablerepo=updates-testing-modular"
 for i in "${!REPOS[@]}"; do
   REPOLIST="${REPOLIST} --repofrompath=repo${i},${REPOS[$i]}"
@@ -66,6 +67,7 @@ done
 # download extension RPMs
 mkdir -p /extensions/okd
 yumdownloader --archlist=x86_64 --disablerepo='*' --destdir=/extensions/okd ${REPOLIST} ${PACKAGES[*]}
+cp -rvf /tmp/rpms/* /extensions/okd
 
 # build rpmostree repo
 cd /extensions
