@@ -23,6 +23,7 @@ PACKAGES=(
   unbound-libs
   python3-libs
 )
+CRIO_VERSION="1.18"
 
 # fetch binaries and configure working env, prow doesn't allow init containers or a second container
 dir=/tmp/ostree
@@ -53,9 +54,9 @@ rm -rf /etc/yum.repos.d
 ostree --repo=/srv/repo checkout "${REF}" --subpath /usr/etc/yum.repos.d --user-mode /etc/yum.repos.d
 dnf clean all
 
-# enable crio 1.18
+# enable crio
 sed -i 's/enabled=0/enabled=1/g' /etc/yum.repos.d/fedora-updates-testing-modular.repo
-dnf module enable -y cri-o:1.18
+dnf module enable -y cri-o:${CRIO_VERSION}
 
 REPOLIST="--enablerepo=fedora --enablerepo=updates --enablerepo=updates-testing-modular"
 for i in "${!REPOS[@]}"; do
