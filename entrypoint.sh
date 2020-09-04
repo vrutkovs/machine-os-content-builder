@@ -66,7 +66,7 @@ done
 mkdir -p /extensions/okd
 yumdownloader --archlist=x86_64 --disablerepo='*' --destdir=/extensions/okd ${REPOLIST} ${EXTENSION_RPMS[*]}
 
-# build rpmostree repo
+# build extension repo
 pushd /extensions
   createrepo_c --no-database .
 popd
