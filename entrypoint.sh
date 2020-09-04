@@ -23,7 +23,7 @@ curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 2>/de
 chmod ug+x $HOME/bin/jq
 
 # fetch fcos release info and check whether we've already built this image
-build_url="https://builds.coreos.fedoraproject.org/prod/streams/${STREAM}/builds"
+build_url="http://vrutkovs.eu:8000/builds"
 curl "${build_url}/builds.json" 2>/dev/null >${dir}/builds.json
 build_id="$( <"${dir}/builds.json" jq -r '.builds[0].id' )"
 base_url="${build_url}/${build_id}/x86_64"
