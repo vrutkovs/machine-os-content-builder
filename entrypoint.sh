@@ -25,8 +25,6 @@ EXTENSION_RPMS=(
   libpciaccess
   pciutils
   pciutils-libs
-  python-pip-wheel
-  python-setuptools-wheel
   python3
   python3-libs
   open-vm-tools
@@ -99,15 +97,14 @@ pushd /tmp/working
   done
   rm -rf etc/localtime
   ln -s ../usr/share/zoneinfo/UTC etc/localtime
+  # remove repos from host so that rpm-ostree would use local repos when installing extensions
+  rm -rf etc/yum.repos.d
   mv etc usr/
 popd
 
 # add binaries (MCD) from /srv/addons
 mkdir -p /tmp/working/usr/bin
 cp -rvf /srv/addons/* /tmp/working/
-
-# remove repos from host so that rpm-ostree would use local repos when installing extensions
-rm -rf /tmp/working/usr/etc/yum.repos.d
 
 # build new commit
 coreos-assembler dev-overlay --repo /srv/repo --rev "${REF}" --add-tree /tmp/working --output-ref "${REF}"
