@@ -20,7 +20,6 @@ EXTENSION_RPMS=(
   libxcrypt-compat
   unbound-libs
   python3-libs
-  hwdata
   libdrm
   libmspack
   libpciaccess
