@@ -97,8 +97,8 @@ pushd /tmp/working
   done
   rm -rf etc/localtime
   ln -s ../usr/share/zoneinfo/UTC etc/localtime
-  # remove repos from host so that rpm-ostree would use local repos when installing extensions
-  rm -rf etc/yum.repos.d
+  # disable repos so that rpm-ostree would use local repos when installing extensions
+  sed -i 's/enabled=1/enabled=0/g' /etc/yum.repos.d/*
   mv etc usr/
 popd
 
