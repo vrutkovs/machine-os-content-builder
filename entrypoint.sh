@@ -98,6 +98,8 @@ pushd /tmp/working
     echo "Extracting $i ..."
     rpm2cpio $i | cpio -div
   done
+  rm -rf etc/localtime
+  ln -s ../usr/share/zoneinfo/UTC etc/localtime
   mv etc usr/
 popd
 
@@ -106,7 +108,7 @@ mkdir -p /tmp/working/usr/bin
 cp -rvf /srv/addons/* /tmp/working/
 
 # remove repos from host so that rpm-ostree would use local repos when installing extensions
-rm -rf /tmp/working/etc/yum.repos.d
+rm -rf /tmp/working/usr/etc/yum.repos.d
 
 # build new commit
 coreos-assembler dev-overlay --repo /srv/repo --rev "${REF}" --add-tree /tmp/working --output-ref "${REF}"
