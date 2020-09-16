@@ -25,8 +25,14 @@ EXTENSION_RPMS=(
   libpciaccess
   pciutils
   pciutils-libs
-  python3
+  hwdata
   python3-libs
+  python3-pip
+  python3
+  python-unversioned-command
+  python-pip-wheel
+  python3-setuptools
+  python-setuptools-wheel
   open-vm-tools
   xmlsec1
   xmlsec1-openssl
@@ -76,7 +82,7 @@ done
 
 # download extension RPMs
 mkdir -p /extensions/okd
-yumdownloader --archlist=x86_64 --disablerepo='*' --destdir=/extensions/okd ${REPOLIST} ${EXTENSION_RPMS[*]}
+yumdownloader --archlist=x86_64 --archlist=noarch --disablerepo='*' --destdir=/extensions/okd ${REPOLIST} ${EXTENSION_RPMS[*]}
 
 # build extension repo
 pushd /extensions
