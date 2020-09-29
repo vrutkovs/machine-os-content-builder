@@ -23,6 +23,40 @@ PACKAGES=(
   unbound-libs
   python3-libs
 )
+# additional RPMs to install via os-extensions
+EXTENSION_RPMS=(
+  attr
+  glusterfs
+  glusterfs-client-xlators
+  glusterfs-fuse
+  glusterfs-libs
+  psmisc
+  NetworkManager-ovs
+  openvswitch
+  dpdk
+  gdbm-libs
+  libxcrypt-compat
+  unbound-libs
+  python3-libs
+  libdrm
+  libmspack
+  libpciaccess
+  pciutils
+  pciutils-libs
+  hwdata
+  python3-libs
+  python3-pip
+  python3
+  python-unversioned-command
+  python-pip-wheel
+  python3-setuptools
+  python-setuptools-wheel
+  open-vm-tools
+  xmlsec1
+  xmlsec1-openssl
+  libxslt
+  libtool-ltdl
+)
 CRIO_VERSION="1.18"
 
 # fetch binaries and configure working env, prow doesn't allow init containers or a second container
@@ -62,6 +96,15 @@ REPOLIST="--enablerepo=fedora --enablerepo=updates --enablerepo=updates-testing-
 for i in "${!REPOS[@]}"; do
   REPOLIST="${REPOLIST} --repofrompath=repo${i},${REPOS[$i]}"
 done
+
+# download extension RPMs
+mkdir -p /extensions/okd
+yumdownloader --archlist=x86_64 --archlist=noarch --disablerepo='*' --destdir=/extensions/okd ${REPOLIST} ${EXTENSION_RPMS[*]}
+
+# build extension repo
+pushd /extensions
+  createrepo_c --no-database .
+popd
 
 # extract rpm content in temp dir
 mkdir /tmp/working
