@@ -11,4 +11,6 @@ RUN /usr/bin/entrypoint.sh
 FROM scratch
 COPY --from=build /srv/ /srv/
 COPY --from=build /extensions/ /extensions/
+COPY manifests/ /manifests/
+LABEL io.openshift.release.operator=true
 ENTRYPOINT ["/noentry"]
