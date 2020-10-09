@@ -84,7 +84,7 @@ done
 
 # download extension RPMs
 mkdir -p /extensions/okd
-yumdownloader --archlist=x86_64 --archlist=noarch --disablerepo='*' --destdir=/extensions/okd ${REPOLIST} ${EXTENSION_RPMS[*]}
+yumdownloader --archlist=x86_64 --archlist=noarch --disablerepo='*' --destdir=/extensions/okd --releasever=${VERSION_ID} ${REPOLIST} ${EXTENSION_RPMS[*]}
 
 # build extension repo
 pushd /extensions
