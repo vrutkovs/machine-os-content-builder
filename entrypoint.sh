@@ -73,6 +73,8 @@ curl -L "${tar_url}" | tar xf - -C /srv/repo/ --no-same-owner
 rm -rf /etc/yum.repos.d
 ostree --repo=/srv/repo checkout "${REF}" --subpath /usr/etc/yum.repos.d --user-mode /etc/yum.repos.d
 dnf clean all
+ostree --repo=/srv/repo cat "${REF}" /usr/lib/os-release > /tmp/os-release
+source /tmp/os-release
 
 # prepare a list of repos to download packages from
 REPOLIST="--enablerepo=fedora --enablerepo=updates"
