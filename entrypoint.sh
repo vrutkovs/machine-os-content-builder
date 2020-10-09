@@ -106,6 +106,9 @@ pushd /tmp/working
   ln -s ../usr/share/zoneinfo/UTC etc/localtime
   # disable repos so that rpm-ostree would use local repos when installing extensions
   sed -i 's/enabled=1/enabled=0/g' /etc/yum.repos.d/*
+  # disable systemd-resolved.service
+  mkdir -p etc/systemd/system/systemd-resolved.service.d
+  echo -e "[Unit]\nConditionPathExists=/enoent" > etc/systemd/system/systemd-resolved.service.d/disabled.conf
   mv etc usr/
 popd
 
