@@ -11,7 +11,6 @@ EXTENSION_RPMS=(
   glusterfs
   glusterfs-client-xlators
   glusterfs-fuse
-  glusterfs-libs
   psmisc
   NetworkManager-ovs
   openvswitch
