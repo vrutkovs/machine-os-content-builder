@@ -104,8 +104,10 @@ pushd /tmp/working
   done
   rm -rf etc/localtime
   ln -s ../usr/share/zoneinfo/UTC etc/localtime
-  # disable repos so that rpm-ostree would use local repos when installing extensions
-  sed -i 's/enabled=1/enabled=0/g' /etc/yum.repos.d/*
+  # https://bugzilla.redhat.com/show_bug.cgi?id=1844198
+  # the openvswitch service triggers SELinux denials on netlink_netfilter_socket
+  mkdir -p etc/selinux
+  echo -e 'SELINUX=permissive\nSELINUXTYPE=targeted' > etc/selinux/config
   mv etc usr/
 popd
 
