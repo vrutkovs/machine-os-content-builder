@@ -108,6 +108,9 @@ pushd /tmp/working
   # the openvswitch service triggers SELinux denials on netlink_netfilter_socket
   mkdir -p etc/selinux
   echo -e 'SELINUX=permissive\nSELINUXTYPE=targeted' > etc/selinux/config
+  # Make sure machines start with /var/run/ovs-config-executed
+  mkdir -p etc/tmpfiles.d
+  echo 'f /var/run/ovs-config-executed 0644 root root -' > etc/tmpfiles.d/ovs.conf
   mv etc usr/
 popd
 
