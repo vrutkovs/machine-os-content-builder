@@ -3,7 +3,7 @@ kind: MachineConfig
 metadata:
   labels:
     machineconfiguration.openshift.io/role: master
-  name: master-extensions
+  name: 99-master-okd-extensions
 spec:
   config:
     ignition:

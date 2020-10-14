@@ -3,7 +3,7 @@ kind: MachineConfig
 metadata:
   labels:
     machineconfiguration.openshift.io/role: worker
-  name: worker-extensions
+  name: 99-worker-okd-extensions
 spec:
   config:
     ignition:
@@ -11,4 +11,5 @@ spec:
   extensions:
     - glusterfs
     - glusterfs-fuse
+    - open-vm-tools
     - NetworkManager-ovs
